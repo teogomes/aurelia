@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════
+   AURELIA — palette lifted straight off the business card.
+   Teal is the brand. "White" is #F2F4F8 (per brief) — except for
+   text ON teal, which stays pure #FFFFFF.
+   ══════════════════════════════════════════════════════════════ */
+@theme {
+  --color-teal-950: #06272d;
+  --color-teal-900: #0f3138; /* ink — headings on light */
+  --color-teal-800: #0d5a64;
+  --color-teal-700: #12707c;
+  --color-teal-600: #17838f;
+  --color-teal-500: #1e9ca8; /* ★ brand teal (card background) */
+  --color-teal-400: #4fb6bf;
+  --color-teal-300: #7fc9d2;
+  --color-teal-200: #a6dbe3;
+  --color-teal-100: #c3e3ec; /* card back, pale blue */
+  --color-teal-50: #e3f1f5;
+
+  --color-bone: #f2f4f8; /* the "white" */
+  --color-bone-dim: #e6eaf1;
+
+  /* `display` is the same family as body — the contrast comes from
+     weight (200) and tracking, not from a second typeface. */
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mark: var(--font-cormorant), "Times New Roman", serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --shell: 88rem;
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* The teal band behind the hero bleeds past overscroll on iOS. */
+  background: var(--color-teal-500);
+}
+
+body {
+  background: var(--color-bone);
+  color: var(--color-teal-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-teal-500);
+  color: #fff;
+}
+
+/* ── Focus: visible, on-brand, never a browser default ─────── */
+:focus-visible {
+  outline: 2px solid var(--color-teal-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TEXTURE — a fine grain over the flat teal so it reads like
+   printed card stock rather than a CSS rectangle.
+   ══════════════════════════════════════════════════════════════ */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THE ORBIT — the ellipse that loops around the footprint in the
+   logo. It is the site's one recurring gesture: it spins behind
+   the hero, underlines every section title, and frames the faces
+   in the testimonials.
+   ══════════════════════════════════════════════════════════════ */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A slow vertical float. Deliberately no rotation — the arch has to
+   stay plumb, or it reads as a rendering bug rather than a choice. */
+@keyframes orbit-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.rise {
+  animation: rise 1s var(--ease-out-expo) both;
+}
+
+/* The wide-tracked serif wordmark from the card. Tracking this loose
+   only reads at size — never set it below ~14px. */
+.wordmark {
+  font-family: var(--font-mark);
+  font-weight: 300;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em; /* re-centre: trailing tracking pushes left */
+}
+
+/* Section + hero headings. Extra-light, tight, big — the whole point
+   is the counter-tension against the loose serif wordmark. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 200;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.serif {
+  font-family: var(--font-mark);
+}
+
+/* Section eyebrow: small, tracked, with a leading orbit dot. */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Hairline separator that echoes the orbit's stroke weight. */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-teal-500) 40%, transparent),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
